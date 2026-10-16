@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador de Dolarización</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f4ef;--card:#fff;--text:#1b2430;--muted:#5c6773;--accent:#0b6b4f;--accent-t:#fff;--warn:#b3402a;--line:#e1ddd3;--field:#fbfaf7;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1519;--card:#182027;--text:#eef1f3;--muted:#9aa6b1;--accent:#3fc59a;--accent-t:#06231a;--warn:#ff8e75;--line:#2a343d;--field:#111920;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1519;--card:#182027;--text:#eef1f3;--muted:#9aa6b1;--accent:#3fc59a;--accent-t:#06231a;--warn:#ff8e75;--line:#2a343d;--field:#111920;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.55rem;line-height:1.2;margin:8px 0 6px}
+p.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+.hint{font-weight:400;color:var(--muted);font-size:.8rem}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--text);font-size:1rem}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-t);font-size:1rem;font-weight:700;margin-top:16px;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.big{font-size:2rem;font-weight:800;color:var(--warn);margin:4px 0}
+.muted{color:var(--muted);font-size:.85rem}
+.bar{height:12px;border-radius:6px;background:var(--line);overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.bar.loss i{background:var(--warn)}
+.scn{margin:12px 0}
+.scn b{font-size:1.05rem}
+.lock{border:2px dashed var(--accent)}
+.chk{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:.82rem;color:var(--muted)}
+.chk input{width:auto;margin-top:3px}
+.err{color:var(--warn);font-size:.85rem;margin-top:8px;min-height:1em}
+.hide{display:none}
+.disc{font-size:.75rem;color:var(--muted);margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="s1">
+    <h1>¿Cuánto poder adquisitivo pierde tu ahorro?</h1>
+    <p class="sub">Simulador gratuito de dolarización. Dos minutos, con tus propios números.</p>
+    <div class="card">
+      <label for="cur">Moneda en la que piensas</label>
+      <select id="cur"><option value="USD">Dólares (USD)</option><option value="COP">Pesos colombianos (COP)</option><option value="MXN">Pesos mexicanos (MXN)</option><option value="ARS">Pesos argentinos (ARS)</option><option value="CLP">Pesos chilenos (CLP)</option><option value="PEN">Soles peruanos (PEN)</option><option value="BRL">Reales brasileños (BRL)</option><option value="UYU">Pesos uruguayos (UYU)</option><option value="BOB">Bolivianos (BOB)</option><option value="PYG">Guaraníes (PYG)</option><option value="DOP">Pesos dominicanos (DOP)</option><option value="CRC">Colones costarricenses (CRC)</option><option value="GTQ">Quetzales (GTQ)</option><option value="EUR">Euros (EUR, España)</option></select>
+      <div id="fxbox" class="hide"><label for="fx">Tasa de cambio <span class="hint">(cuántas unidades de tu moneda equivalen a 1 USD; búscala hoy en Google)</span></label><input id="fx" type="number" inputmode="decimal" placeholder="Ej: 3200" min="0" step="any"></div>
+      <label for="cap">Capital disponible hoy <span class="hint" id="h1">(equivalente en USD)</span></label>
+      <input id="cap" type="number" inputmode="numeric" min="0" placeholder="Ej: 50000">
+      <label for="mon">Ahorro o inversión mensual <span class="hint" id="h2">(USD, puede ser 0)</span></label>
+      <input id="mon" type="number" inputmode="numeric" min="0" placeholder="Ej: 500">
+      <div class="row">
+        <div><label for="yrs">Horizonte</label>
+          <select id="yrs"><option value="5">5 años</option><option value="10" selected>10 años</option><option value="15">15 años</option></select></div>
+        <div><label for="inf">Pérdida anual <span class="hint">(%)</span></label>
+          <input id="inf" type="number" inputmode="decimal" value="6" min="0" max="100" step="0.5"></div>
+      </div>
+      <p class="muted" style="margin:8px 0 0">La pérdida anual es la inflación o devaluación que tú estimas para tu moneda. Es un supuesto tuyo: cámbialo cuando quieras.</p>
+      <button id="go">Ver mi simulación</button>
+      <div class="err" id="e1"></div>
+    </div>
+  </div>
+
+  <div id="s2" class="hide">
+    <div class="card">
+      <div class="muted">Tu ahorro, en poder adquisitivo de hoy, perdería aproximadamente:</div>
+      <div class="big" id="loss">$0</div>
+      <div class="muted" id="lossTxt"></div>
+      <div class="bar loss"><i id="lossBar" style="width:0"></i></div>
+    </div>
+
+    <div class="card lock" id="gate">
+      <b>Desbloquea tu comparación completa</b>
+      <p class="muted" style="margin:6px 0 0">Ve cómo se vería tu capital en dólares en tres escenarios y recibe tu resultado por WhatsApp.</p>
+      <label for="nom">Nombre</label><input id="nom" autocomplete="name">
+      <label for="wa">WhatsApp <span class="hint">(con código de país)</span></label><input id="wa" type="tel" inputmode="tel" placeholder="+57 300 000 0000" autocomplete="tel">
+      <label for="pais">País donde vives</label><input id="pais" autocomplete="country-name">
+      <label for="obj">¿Cuál es tu objetivo?</label>
+      <select id="obj"><option value="">Selecciona</option><option value="inv">Invertir mi capital</option><option value="ase">Soy asesor o corredor</option><option value="apr">Solo quiero aprender</option></select>
+      <label for="rng">¿Qué rango de inversión manejas?</label>
+      <select id="rng"><option value="">Selecciona</option><option>Menos de $50,000</option><option>$50,000 a $150,000</option><option>$150,000 a $300,000</option><option>Más de $300,000</option></select>
+      <label class="chk"><input type="checkbox" id="ok"><span>Acepto que me contacten por WhatsApp con información sobre el evento y contenido educativo. Puedo salir cuando quiera.</span></label>
+      <button id="unlock">Desbloquear resultado</button>
+      <div class="err" id="e2"></div>
+    </div>
+
+    <div id="full" class="hide">
+      <div class="card">
+        <b>Tu capital en dólares, en tres escenarios</b>
+        <p class="muted" style="margin:4px 0 0" id="aport"></p>
+        <div id="scns"></div>
+        <p class="muted">Los rendimientos (0%, 4% y 8% anual) son ilustrativos. No son promesas ni proyecciones de ningún producto.</p>
+      </div>
+      <div class="card">
+        <b id="thanks"></b>
+        <p class="muted" style="margin:6px 0 0">Toca el botón para enviarme tu simulación por WhatsApp y recibir el acceso al grupo con contenido educativo y la invitación a nuestro evento de 3 días.</p>
+        <button id="send">Enviar por WhatsApp y entrar al grupo</button>
+        <button class="alt" id="again">Hacer otra simulación</button>
+      </div>
+    </div>
+  </div>
+  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses.</p>
+</div>
+
+<script>
+// CONFIGURACIÓN: coloca aquí tu número de WhatsApp (solo dígitos, con código de país) y el link de tu grupo.
+var WA_NUMBER = "50768925558";
+var GROUP_LINK = "https://chat.whatsapp.com/GTPfpCyjr533N45TCFUrKk?s=cl&p=a&mlu=4&ilr=4";
+
+var $ = function(id){return document.getElementById(id)};
+var S = {};
+function usd(n){return "$" + Math.round(n).toLocaleString("en-US")}
+var CUR = "USD", FX = 1;
+function loc(n){ return CUR!=="USD" ? Math.round(n*FX).toLocaleString("es-CO") + " " + CUR : usd(n) }
+function sim(cap, mon, yrs, p, r){
+  var months = yrs*12, v = cap, loc = cap;
+  var mr = Math.pow(1+r,1/12)-1, mp = Math.pow(1+p,1/12)-1;
+  var vv = cap, ll = cap;
+  for(var k=1;k<=months;k++){ vv = vv*(1+mr)+mon; ll = ll*(1-0)+0; }
+  return vv;
+}
+function localPower(cap, mon, yrs, p){
+  var months = yrs*12, mp = Math.pow(1+p,1/12)-1, v = cap;
+  for(var k=1;k<=months;k++){ v = v/(1+mp) + mon; }
+  return v;
+}
+$("cur").onchange = function(){ var code = $("cur").value, c = code!=="USD"; $("fxbox").classList.toggle("hide", !c); $("h1").textContent = c ? "(en " + code + ")" : "(equivalente en USD)"; $("h2").textContent = c ? "(en " + code + ", puede ser 0)" : "(USD, puede ser 0)"; $("cap").placeholder = c ? "Tu capital en " + code : "Ej: 50000"; $("mon").placeholder = c ? "Tu ahorro mensual en " + code : "Ej: 500"; };
+$("go").onclick = function(){
+  CUR = $("cur").value; FX = CUR!=="USD" ? (parseFloat($("fx").value)||0) : 1;
+  if(FX<=0){ $("e1").textContent = "Ingresa una tasa de cambio válida."; return; }
+  var cap = (parseFloat($("cap").value)||0)/FX, mon = (parseFloat($("mon").value)||0)/FX;
+  var yrs = parseInt($("yrs").value,10), p = (parseFloat($("inf").value)||0)/100;
+  if(cap<=0 && mon<=0){ $("e1").textContent = "Ingresa al menos un capital o un ahorro mensual."; return; }
+  $("e1").textContent = "";
+  var aport = cap + mon*yrs*12, local = localPower(cap, mon, yrs, p), loss = Math.max(0, aport-local);
+  S = {cap:cap, mon:mon, yrs:yrs, p:p, aport:aport, local:local, loss:loss};
+  $("loss").textContent = loc(loss);
+  $("lossTxt").textContent = "De " + loc(aport) + " aportados en " + yrs + " años, tu poder adquisitivo quedaría en " + loc(local) + " si lo dejas en moneda local con una pérdida de " + (p*100).toFixed(2) + "% anual.";
+  $("lossBar").style.width = (aport>0 ? Math.min(100, loss/aport*100) : 0) + "%";
+  $("s1").classList.add("hide"); $("s2").classList.remove("hide"); window.scrollTo(0,0);
+};
+$("unlock").onclick = function(){
+  var nom=$("nom").value.trim(), wa=$("wa").value.trim(), pais=$("pais").value.trim(), obj=$("obj").value, rng=$("rng").value;
+  var digits = wa.replace(/\D/g,"");
+  if(!nom||digits.length<8||!pais||!obj||!rng){ $("e2").textContent = "Completa todos los campos con un WhatsApp válido."; return; }
+  if(!$("ok").checked){ $("e2").textContent = "Necesitamos tu autorización para contactarte."; return; }
+  $("e2").textContent = "";
+  S.nom=nom; S.wa=wa; S.pais=pais; S.obj=obj; S.rng=rng;
+  $("aport").textContent = "Aportado en " + S.yrs + " años: " + loc(S.aport) + ". En moneda local, hoy valdría " + loc(S.local) + " en poder adquisitivo.";
+  var html = "", rates=[0,0.04,0.08], max = 0, vals = rates.map(function(r){return sim(S.cap,S.mon,S.yrs,S.p,r)});
+  max = Math.max.apply(null, vals.concat([S.aport]));
+  vals.forEach(function(v,i){
+    html += '<div class="scn"><b>' + usd(v) + '</b>' + (CUR!=="USD" ? ' <span class="muted">(≈ ' + loc(v) + ' al cambio de hoy)</span>' : '') + ' <span class="muted">con ' + (rates[i]*100) + '% anual en dólares</span><div class="bar"><i style="width:' + (v/max*100) + '%"></i></div></div>';
+  });
+  $("scns").innerHTML = html;
+  $("thanks").textContent = obj==="ase" ? "Gracias, " + nom + ". Veo que eres asesor: tenemos una vía para aliados." : "Listo, " + nom + ". Tu simulación está desbloqueada.";
+  $("gate").classList.add("hide"); $("full").classList.remove("hide");
+  if(GROUP_LINK && !$("full").querySelector(".gl")){ var g=document.createElement("p"); g.className="muted gl"; g.innerHTML='¿Prefieres entrar directo? <a href="'+GROUP_LINK+'" target="_blank" rel="noopener">Unirme al grupo de WhatsApp</a>'; $("full").appendChild(g); }
+};
+$("send").onclick = function(){
+  var o = {inv:"Invertir mi capital", ase:"Soy asesor o corredor", apr:"Solo quiero aprender"}[S.obj];
+  var msg = "Hola, hice el Simulador de Dolarización.\nNombre: " + S.nom + "\nPaís: " + S.pais + "\nObjetivo: " + o + "\nRango: " + S.rng +
+    "\nCapital: " + loc(S.cap) + " | Mensual: " + loc(S.mon) + " | Horizonte: " + S.yrs + " años\nQuiero entrar al grupo.";
+  var url = "https://wa.me/" + WA_NUMBER.replace(/\D/g,"") + "?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
+  if(GROUP_LINK){ var a=document.createElement("p"); a.className="muted"; a.innerHTML='Si prefieres, entra directo al grupo: <a href="'+GROUP_LINK+'" target="_blank" rel="noopener">unirme al grupo</a>'; if(!$("full").querySelector(".gl")){a.className+=" gl";$("full").appendChild(a)} }
+};
+$("again").onclick = function(){ $("s2").classList.add("hide"); $("gate").classList.remove("hide"); $("full").classList.add("hide"); $("s1").classList.remove("hide"); window.scrollTo(0,0); };
+</script>
+</body>
+</html>
