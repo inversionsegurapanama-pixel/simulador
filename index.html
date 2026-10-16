@@ -94,8 +94,8 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       </div>
       <div class="card">
         <b id="thanks"></b>
-        <p class="muted" style="margin:6px 0 0">Toca el botón para enviarme tu simulación por WhatsApp y recibir el acceso al grupo con contenido educativo y la invitación a nuestro evento de 3 días.</p>
-        <button id="send">Enviar por WhatsApp y entrar al grupo</button>
+        <p class="muted" style="margin:6px 0 0">Sigue estos 2 pasos. Paso 1: envía tu simulación por WhatsApp. Paso 2: entra al grupo, donde recibirás contenido educativo y la invitación a nuestro evento de 3 días.</p>
+        <button id="send">1. Enviar mi simulación por WhatsApp</button>
         <button class="alt" id="again">Hacer otra simulación</button>
       </div>
     </div>
@@ -156,11 +156,11 @@ $("unlock").onclick = function(){
   $("scns").innerHTML = html;
   $("thanks").textContent = obj==="ase" ? "Gracias, " + nom + ". Veo que eres asesor: tenemos una vía para aliados." : "Listo, " + nom + ". Tu simulación está desbloqueada.";
   $("gate").classList.add("hide"); $("full").classList.remove("hide");
-  if(GROUP_LINK && !$("full").querySelector(".gl")){ var g=document.createElement("p"); g.className="muted gl"; g.innerHTML='¿Prefieres entrar directo? <a href="'+GROUP_LINK+'" target="_blank" rel="noopener">Unirme al grupo de WhatsApp</a>'; $("full").appendChild(g); }
+  if(GROUP_LINK && !$("full").querySelector(".gl")){ var g=document.createElement("p"); g.className="gl"; g.innerHTML='<a href="'+GROUP_LINK+'" target="_blank" rel="noopener" style="display:block;text-align:center;padding:14px;border-radius:12px;background:var(--accent);color:var(--accent-t);font-weight:700;text-decoration:none;margin-top:12px">2. Entrar al grupo de WhatsApp</a>'; $("again").parentNode.insertBefore(g, $("again")); }
 };
 $("send").onclick = function(){
   var o = {inv:"Invertir mi capital", ase:"Soy asesor o corredor", apr:"Solo quiero aprender"}[S.obj];
-  var msg = "Hola, hice el Simulador de Dolarización.\nNombre: " + S.nom + "\nPaís: " + S.pais + "\nObjetivo: " + o + "\nRango: " + S.rng +
+  var msg = "Hola, hice el Simulador de Dolarización.\nNombre: " + S.nom + "\nWhatsApp: " + S.wa + "\nPaís: " + S.pais + "\nObjetivo: " + o + "\nRango: " + S.rng +
     "\nCapital: " + loc(S.cap) + " | Mensual: " + loc(S.mon) + " | Horizonte: " + S.yrs + " años\nQuiero entrar al grupo.";
   var url = "https://wa.me/" + WA_NUMBER.replace(/\D/g,"") + "?text=" + encodeURIComponent(msg);
   window.open(url, "_blank");
