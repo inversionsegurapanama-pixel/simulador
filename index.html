@@ -72,7 +72,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
 
     <div class="card lock" id="gate">
       <b>Desbloquea tu comparación completa</b>
-      <p class="muted" style="margin:6px 0 0">Ve cómo se vería tu capital en dólares en tres escenarios. Al desbloquear, te llevamos al grupo de WhatsApp.</p>
+      <p class="muted" style="margin:6px 0 0">Ve cómo se vería tu capital en dólares en tres escenarios. Al desbloquear, te mostramos cómo unirte al grupo de WhatsApp.</p>
       <label for="nom">Nombre completo</label><input id="nom" autocomplete="name">
       <label for="wa">WhatsApp <span class="hint">(con código de país)</span></label><input id="wa" type="tel" inputmode="tel" placeholder="+57 300 000 0000" autocomplete="tel">
       <label for="em">Correo electrónico</label><input id="em" type="email" inputmode="email" placeholder="tucorreo@ejemplo.com" autocomplete="email">
@@ -82,7 +82,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       <label for="rng">¿Qué rango de inversión manejas? <span class="hint">(en USD)</span></label>
       <select id="rng"><option value="">Selecciona</option><option value="Menos de US$200,000">Menos de $200,000</option><option value="US$200,000 a US$300,000">$200,000 a $300,000</option><option value="US$300,000 a US$500,000">$300,000 a $500,000</option><option value="Mas de US$500,000">Más de $500,000</option></select>
       <label class="chk"><input type="checkbox" id="ok"><span>Acepto unirme al grupo de WhatsApp y recibir contenido educativo y la invitación al evento por WhatsApp y correo. Puedo salir cuando quiera.</span></label>
-      <button id="unlock">Desbloquear resultado y entrar al grupo</button>
+      <button id="unlock">Desbloquear resultado</button>
       <div class="err" id="e2"></div>
     </div>
 
@@ -95,13 +95,13 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       </div>
       <div class="card">
         <b id="thanks"></b>
-        <p class="muted" style="margin:6px 0 0">Entra al grupo de WhatsApp para recibir contenido educativo y la invitación a nuestro evento de 3 días.</p>
+        <p class="muted" style="margin:6px 0 0">Último paso: toca el botón y, en WhatsApp, toca “Unirme al grupo” para quedar dentro. Ahí recibirás contenido educativo y la invitación a nuestro evento de 3 días.</p>
         <button id="send" class="hide">1. Enviar mi simulación por WhatsApp</button>
         <button class="alt" id="again">Hacer otra simulación</button>
       </div>
     </div>
   </div>
-  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v3)</p>
+  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v4)</p>
 </div>
 
 <script>
@@ -161,7 +161,7 @@ $("unlock").onclick = function(){
   if(!nom||digits.length<8||!/^\S+@\S+\.\S+$/.test($("em").value.trim())||!pais||!obj||!rng){ $("e2").textContent = "Completa todos los campos con un WhatsApp y un correo válidos."; return; }
   if(!$("ok").checked){ $("e2").textContent = "Necesitamos tu autorización para contactarte."; return; }
   $("e2").textContent = "";
-  S.nom=nom; S.wa=wa; S.em=$("em").value.trim(); S.pais=pais; S.obj=obj; S.rng=rng; sendLead(); if(GROUP_LINK){ window.open(GROUP_LINK, "_blank"); }
+  S.nom=nom; S.wa=wa; S.em=$("em").value.trim(); S.pais=pais; S.obj=obj; S.rng=rng; sendLead();
   $("aport").textContent = "Aportado en " + S.yrs + " años: " + loc(S.aport) + ". En moneda local, hoy valdría " + loc(S.local) + " en poder adquisitivo.";
   var html = "", rates=[0,0.04,0.08], max = 0, vals = rates.map(function(r){return sim(S.cap,S.mon,S.yrs,S.p,r)});
   max = Math.max.apply(null, vals.concat([S.aport]));
@@ -170,8 +170,8 @@ $("unlock").onclick = function(){
   });
   $("scns").innerHTML = html;
   $("thanks").textContent = obj==="Soy bienes raíces" ? "Gracias, " + nom + ". Veo que eres asesor: tenemos una vía para aliados." : "Listo, " + nom + ". Tu simulación está desbloqueada.";
-  $("gate").classList.add("hide"); $("full").classList.remove("hide");
-  if(GROUP_LINK && !$("full").querySelector(".gl")){ var g=document.createElement("p"); g.className="gl"; g.innerHTML='<a href="'+GROUP_LINK+'" target="_blank" rel="noopener" style="display:block;text-align:center;padding:14px;border-radius:12px;background:var(--accent);color:var(--accent-t);font-weight:700;text-decoration:none;margin-top:12px">Entrar al grupo de WhatsApp</a>'; $("again").parentNode.insertBefore(g, $("again")); }
+  $("gate").classList.add("hide"); $("full").classList.remove("hide"); $("full").insertBefore($("thanks").parentNode, $("full").firstChild);
+  if(GROUP_LINK && !$("full").querySelector(".gl")){ var g=document.createElement("p"); g.className="gl"; g.innerHTML='<a href="'+GROUP_LINK+'" target="_blank" rel="noopener" style="display:block;text-align:center;padding:14px;border-radius:12px;background:var(--accent);color:var(--accent-t);font-weight:700;text-decoration:none;margin-top:12px">Unirme al grupo de WhatsApp</a>'; $("again").parentNode.insertBefore(g, $("again")); }
 };
 $("send").onclick = function(){
   var o = {inv:"Invertir mi capital", ase:"Soy asesor o corredor", apr:"Solo quiero aprender"}[S.obj];
