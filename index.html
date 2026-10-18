@@ -52,7 +52,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       <input id="mon" type="number" inputmode="numeric" min="0" placeholder="Ej: 500">
       <div class="row">
         <div><label for="yrs">Horizonte</label>
-          <select id="yrs"><option value="5">5 años</option><option value="10" selected>10 años</option><option value="15">15 años</option></select></div>
+          <select id="yrs"><option value="5">5 años</option><option value="10" selected>10 años</option><option value="15">15 años</option><option value="20">20 años</option><option value="30">30 años</option></select></div>
         <div><label for="inf">Pérdida anual <span class="hint">(%)</span></label>
           <input id="inf" type="number" inputmode="decimal" value="6" min="0" max="100" step="0.5"></div>
       </div>
@@ -64,14 +64,25 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
 
   <div id="s2" class="hide">
     <div class="card">
-      <div class="muted">Tu ahorro, en poder adquisitivo de hoy, perdería aproximadamente:</div>
-      <div class="big" id="loss">$0</div>
+      <div class="muted" style="font-weight:700;letter-spacing:.04em">TU RESULTADO</div><h2 style="font-size:1.25rem;margin:4px 0 2px">¿Qué está pasando con tu dinero?</h2>
+      <div class="big" id="pct">0%</div><div class="muted">Pérdida estimada de poder adquisitivo en el período seleccionado.</div><div class="muted" id="loss" style="margin-top:6px"></div>
       <div class="muted" id="lossTxt"></div>
       <div class="bar loss"><i id="lossBar" style="width:0"></i></div>
     </div>
 
+    <div class="card" id="explain">
+      <b>¿Qué significa esta cifra?</b>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Tu dinero puede seguir teniendo el mismo valor nominal, pero comprar menos cosas que hoy. Si los precios suben y tus ahorros no crecen al mismo ritmo, tu capacidad de compra disminuye.</p>
+      <b>¿Y si no hago nada?</b>
+      <p id="cons" style="font-size:.95rem;color:var(--muted);margin:4px 0 14px"></p>
+      <b>¿Cómo puedes proteger mejor tu patrimonio?</b>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Una alternativa es evaluar la diversificación de parte de tus ahorros hacia activos denominados en dólares, para depender menos de una sola moneda. No elimina los riesgos de invertir, y el dólar también pierde valor con la inflación de EE.UU.</p>
+      <b>El siguiente paso</b>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 0">Conocer tu objetivo patrimonial y el capital que considerarías destinar a una inversión internacional. Responde las preguntas de abajo para ver tu comparación completa.</p>
+    </div>
+
     <div class="card lock" id="gate">
-      <b>Desbloquea tu comparación completa</b>
+      <b>Cuéntanos tu objetivo y desbloquea tu comparación completa</b>
       <p class="muted" style="margin:6px 0 0">Ve cómo se vería tu capital en dólares en tres escenarios. Al desbloquear, te mostramos cómo unirte al grupo de WhatsApp.</p>
       <label for="nom">Nombre completo</label><input id="nom" autocomplete="name">
       <label for="wa">WhatsApp <span class="hint">(con código de país)</span></label><input id="wa" type="tel" inputmode="tel" placeholder="+57 300 000 0000" autocomplete="tel">
@@ -101,7 +112,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       </div>
     </div>
   </div>
-  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v4)</p>
+  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v6)</p>
 </div>
 
 <script>
@@ -150,7 +161,10 @@ $("go").onclick = function(){
   $("e1").textContent = "";
   var aport = cap + mon*yrs*12, local = localPower(cap, mon, yrs, p), loss = Math.max(0, aport-local);
   S = {cap:cap, mon:mon, yrs:yrs, p:p, aport:aport, local:local, loss:loss};
-  $("loss").textContent = loc(loss);
+  var pct = aport>0 ? loss/aport*100 : 0;
+  $("pct").textContent = pct.toFixed(1) + "%";
+  $("loss").textContent = "Equivale a unos " + loc(loss) + " de poder adquisitivo.";
+  $("cons").textContent = "Si tus ahorros no generan al menos ese rendimiento, dentro de " + yrs + " años podrían comprar cerca de un " + pct.toFixed(0) + "% menos que hoy.";
   $("lossTxt").textContent = "De " + loc(aport) + " aportados en " + yrs + " años, tu poder adquisitivo quedaría en " + loc(local) + " si lo dejas en moneda local con una pérdida de " + (p*100).toFixed(2) + "% anual.";
   $("lossBar").style.width = (aport>0 ? Math.min(100, loss/aport*100) : 0) + "%";
   $("s1").classList.add("hide"); $("s2").classList.remove("hide"); window.scrollTo(0,0);
