@@ -67,6 +67,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       <div class="muted" style="font-weight:700;letter-spacing:.04em">TU RESULTADO</div><h2 style="font-size:1.25rem;margin:4px 0 2px">¿Qué está pasando con tu dinero?</h2>
       <div class="big" id="pct">0%</div><div class="muted">Pérdida estimada de poder adquisitivo en el período seleccionado, si tu ahorro no genera rendimiento (calculada sobre el total aportado).</div><div class="muted" id="loss" style="margin-top:6px"></div>
       <div class="muted" id="lossTxt"></div>
+      <div class="muted" id="infres" style="margin-top:6px"></div>
       <div class="bar loss"><i id="lossBar" style="width:0"></i></div>
     </div>
 
@@ -113,7 +114,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       </div>
     </div>
   </div>
-  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v14)</p>
+  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v15)</p>
 </div>
 
 <script>
@@ -146,10 +147,11 @@ var INFL = {
   EUR:{v:4.9,f:"INE, España",p:"septiembre de 2026"},
   ARS:{v:33.4,f:"INDEC, Argentina",p:"septiembre de 2026"}
 };
+function infText(p){ var d=INFL[$("cur").value], n=String(+(p*100).toFixed(2)).replace(".",","); return d ? "Inflación de referencia: "+n+"% anual ("+d.f+", "+d.p+"). Mantenerla constante durante varios años es un supuesto ilustrativo, no una predicción." : "Inflación que ingresaste: "+n+"% anual. Mantenerla constante durante varios años es un supuesto ilustrativo."; }
 function refreshInf(){
   var d=INFL[$("cur").value], box=$("inf").parentNode;
   if(d){ $("inf").value=d.v; box.classList.add("hide");
-    $("infref").textContent="Inflación de referencia: "+String(d.v).replace(".",",")+"% anual ("+d.f+", "+d.p+"), último dato oficial cargado. Mantenerla constante durante varios años es un supuesto ilustrativo, no una predicción."; }
+    $("infref").textContent=""; }
   else { box.classList.remove("hide");
     $("infref").textContent="Aún no hay un dato oficial cargado para esta moneda: escribe tu estimación de inflación anual (%). Mantenerla constante durante varios años es un supuesto ilustrativo."; }
 }
@@ -183,7 +185,7 @@ $("go").onclick = function(){
   $("loss").textContent = "Equivale a unos " + loc(loss) + " de poder adquisitivo.";
   $("cons").textContent = "De cada 100 que aportes, unos " + pct.toFixed(0) + " perderían poder de compra en " + yrs + " años si no generan rendimiento. Es una estimación con la inflación de referencia, no una predicción.";
   $("lossTxt").textContent = "Aportarías " + loc(aport) + " en " + yrs + " años. Sin rendimiento y con la inflación de referencia (" + (p*100).toFixed(2).replace(/\.?0+$/,"") + "% anual), ese dinero conservaría el poder de compra de unos " + loc(local) + ", medido en el momento de cada aporte.";
-  $("lossBar").style.width = (aport>0 ? Math.min(100, loss/aport*100) : 0) + "%";
+  $("lossBar").style.width = (aport>0 ? Math.min(100, loss/aport*100) : 0) + "%"; $("infres").textContent = infText(p);
   $("s1").classList.add("hide"); $("s2").classList.remove("hide"); window.scrollTo(0,0);
 };
 $("unlock").onclick = function(){
