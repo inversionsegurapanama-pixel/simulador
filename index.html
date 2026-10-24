@@ -56,7 +56,7 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
         <div><label for="inf">Pérdida anual <span class="hint">(%)</span></label>
           <input id="inf" type="number" inputmode="decimal" value="6" min="0" max="100" step="0.5"></div>
       </div>
-      <p class="muted" style="margin:8px 0 0">La pérdida anual es la inflación o devaluación que tú estimas para tu moneda. Es un supuesto tuyo: cámbialo cuando quieras.</p>
+      <p class="muted" id="infref" style="margin:8px 0 0"></p>
       <button id="go">Ver mi simulación</button>
       <div class="err" id="e1"></div>
     </div>
@@ -65,20 +65,21 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
   <div id="s2" class="hide">
     <div class="card">
       <div class="muted" style="font-weight:700;letter-spacing:.04em">TU RESULTADO</div><h2 style="font-size:1.25rem;margin:4px 0 2px">¿Qué está pasando con tu dinero?</h2>
-      <div class="big" id="pct">0%</div><div class="muted">Pérdida estimada de poder adquisitivo en el período seleccionado, si tu ahorro no genera rendimiento.</div><div class="muted" id="loss" style="margin-top:6px"></div>
+      <div class="big" id="pct">0%</div><div class="muted">Pérdida estimada de poder adquisitivo en el período seleccionado, si tu ahorro no genera rendimiento (calculada sobre el total aportado).</div><div class="muted" id="loss" style="margin-top:6px"></div>
       <div class="muted" id="lossTxt"></div>
       <div class="bar loss"><i id="lossBar" style="width:0"></i></div>
     </div>
 
     <div class="card" id="explain">
-      <b>¿Qué significa esta cifra?</b>
-      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Tu dinero puede seguir teniendo el mismo valor en el papel, pero comprar menos cosas que hoy. Si los precios suben y tus ahorros no rinden al menos lo mismo que la inflación, tu poder adquisitivo disminuye.</p>
-      <b>¿Y si no hago nada?</b>
+      <b>¿Qué está pasando con tu dinero?</b>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Cuando los precios suben, la misma cantidad de dinero compra menos cosas con el paso del tiempo. Tu dinero no desaparece: pierde capacidad de compra.</p>
+      <b>¿Por qué importa?</b>
       <p id="cons" style="font-size:.95rem;color:var(--muted);margin:4px 0 14px"></p>
-      <b>¿Cómo puedes proteger mejor tu patrimonio?</b>
-      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Una alternativa es evaluar la diversificación de parte de tus ahorros hacia activos denominados en dólares, para depender menos de una sola moneda. No elimina los riesgos de invertir, y el dólar también pierde valor con la inflación de EE.UU.</p>
-      <b>El siguiente paso</b>
-      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 0">Conocer tu objetivo patrimonial y el capital que considerarías destinar a una inversión internacional. Responde las preguntas de abajo para ver tu comparación completa.</p>
+      <b>¿Qué alternativa existe?</b>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Una opción que muchas personas consideran es mantener parte de su patrimonio en activos denominados en dólares, para depender menos de una sola moneda. No elimina todos los riesgos: el dólar también pierde poder adquisitivo por su propia inflación y las inversiones pueden generar pérdidas.</p>
+      <b>Y ahora, una pregunta</b>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 14px">Ahora que has visto cómo la inflación puede afectar tu capacidad de compra, vale la pena explorar: ¿qué alternativas existen para diversificar tu patrimonio y generar ingresos en dólares? 📲 Te invito a <b>Rentas Hoteleras en Dólares: El Desafío</b>, los días <b>20, 21 y 22 de noviembre</b>. Aprenderás los 5 pasos para generar ingresos pasivos en dólares todos los meses, con operación 100% delegada y sin salir de tu país. <b>Evento gratuito, cupos limitados.</b></p>
+      <p style="font-size:.95rem;color:var(--muted);margin:4px 0 0">Cuéntanos tu objetivo abajo para ver tu comparación completa.</p>
     </div>
 
     <div class="card lock" id="gate">
@@ -106,13 +107,13 @@ button.alt{background:transparent;color:var(--accent);border:1px solid var(--acc
       </div>
       <div class="card">
         <b id="thanks"></b>
-        <p class="muted" style="margin:6px 0 0"><b>Ya conoces tu número.</b> Ahora la pregunta es: ¿vas a dejar que la inflación siga restando valor a tus ahorros, o vas a evaluar cómo poner parte de ese capital a trabajar en dólares?<br><br>📲 Te invito a <b>Rentas Hoteleras en Dólares: El Desafío</b>, nuestro evento en vivo de 3 días:<br>«Los 5 pasos para generar ingresos pasivos en dólares con operación 100% delegada, sin salir de tu país».<br><br>Únete al grupo de WhatsApp para que recibas todos los detalles.<br><br>Último paso: toca el botón y, en WhatsApp, toca “Unirme al grupo” para quedar dentro.</p>
+        <p class="muted" style="margin:6px 0 0"><span id="persn"></span><br><br>Únete al grupo de WhatsApp para que recibas todos los detalles de <b>Rentas Hoteleras en Dólares: El Desafío</b> (20, 21 y 22 de noviembre de 2026).<br><br>Último paso: toca el botón y, en WhatsApp, toca “Unirme al grupo” para quedar dentro.</p>
         <button id="send" class="hide">1. Enviar mi simulación por WhatsApp</button>
         <button class="alt" id="again">Hacer otra simulación</button>
       </div>
     </div>
   </div>
-  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v11)</p>
+  <p class="disc">Herramienta educativa e ilustrativa. No constituye asesoría financiera, ni garantiza rendimientos. Los resultados dependen de los supuestos que tú ingreses. (v14)</p>
 </div>
 
 <script>
@@ -137,6 +138,21 @@ function sendLead(){
     fetch(FORM_URL, {method:"POST", mode:"no-cors", body:d, keepalive:true});
   }catch(e){}
 }
+var INFL = {
+  USD:{v:3.7,f:"BLS, EE.UU.",p:"septiembre de 2026"},
+  COP:{v:6.29,f:"DANE, Colombia",p:"septiembre de 2026"},
+  MXN:{v:3.45,f:"INEGI, México",p:"septiembre de 2026"},
+  CLP:{v:4.1,f:"INE, Chile",p:"septiembre de 2026"},
+  EUR:{v:4.9,f:"INE, España",p:"septiembre de 2026"},
+  ARS:{v:33.4,f:"INDEC, Argentina",p:"septiembre de 2026"}
+};
+function refreshInf(){
+  var d=INFL[$("cur").value], box=$("inf").parentNode;
+  if(d){ $("inf").value=d.v; box.classList.add("hide");
+    $("infref").textContent="Inflación de referencia: "+String(d.v).replace(".",",")+"% anual ("+d.f+", "+d.p+"), último dato oficial cargado. Mantenerla constante durante varios años es un supuesto ilustrativo, no una predicción."; }
+  else { box.classList.remove("hide");
+    $("infref").textContent="Aún no hay un dato oficial cargado para esta moneda: escribe tu estimación de inflación anual (%). Mantenerla constante durante varios años es un supuesto ilustrativo."; }
+}
 var CUR = "USD", FX = 1;
 function loc(n){ return CUR!=="USD" ? Math.round(n*FX).toLocaleString("es-CO") + " " + CUR : usd(n) }
 function sim(cap, mon, yrs, p, r){
@@ -151,7 +167,8 @@ function localPower(cap, mon, yrs, p){
   for(var k=1;k<=months;k++){ v = v/(1+mp) + mon; }
   return v;
 }
-$("cur").onchange = function(){ var code = $("cur").value, c = code!=="USD"; $("fxbox").classList.toggle("hide", !c); $("h1").textContent = c ? "(en " + code + ")" : "(equivalente en USD)"; $("h2").textContent = c ? "(en " + code + ", puede ser 0)" : "(USD, puede ser 0)"; $("cap").placeholder = c ? "Tu capital en " + code : "Ej: 50000"; $("mon").placeholder = c ? "Tu ahorro mensual en " + code : "Ej: 500"; };
+$("cur").onchange = function(){ var code = $("cur").value, c = code!=="USD"; $("fxbox").classList.toggle("hide", !c); $("h1").textContent = c ? "(en " + code + ")" : "(equivalente en USD)"; $("h2").textContent = c ? "(en " + code + ", puede ser 0)" : "(USD, puede ser 0)"; $("cap").placeholder = c ? "Tu capital en " + code : "Ej: 50000"; $("mon").placeholder = c ? "Tu ahorro mensual en " + code : "Ej: 500"; refreshInf(); };
+refreshInf();
 $("go").onclick = function(){
   CUR = $("cur").value; FX = CUR!=="USD" ? (parseFloat($("fx").value)||0) : 1;
   if(FX<=0){ $("e1").textContent = "Ingresa una tasa de cambio válida."; return; }
@@ -164,8 +181,8 @@ $("go").onclick = function(){
   var pct = aport>0 ? loss/aport*100 : 0;
   $("pct").textContent = pct.toFixed(1) + "%";
   $("loss").textContent = "Equivale a unos " + loc(loss) + " de poder adquisitivo.";
-  $("cons").textContent = "Si tu dinero no genera al menos ese rendimiento, dentro de " + yrs + " años podría comprar cerca de un " + pct.toFixed(0) + "% menos que hoy.";
-  $("lossTxt").textContent = "De " + loc(aport) + " aportados en " + yrs + " años, tu poder adquisitivo quedaría en " + loc(local) + " si lo dejas en moneda local sin generar rendimiento y con una pérdida de " + (p*100).toFixed(2) + "% anual.";
+  $("cons").textContent = "De cada 100 que aportes, unos " + pct.toFixed(0) + " perderían poder de compra en " + yrs + " años si no generan rendimiento. Es una estimación con la inflación de referencia, no una predicción.";
+  $("lossTxt").textContent = "Aportarías " + loc(aport) + " en " + yrs + " años. Sin rendimiento y con la inflación de referencia (" + (p*100).toFixed(2).replace(/\.?0+$/,"") + "% anual), ese dinero conservaría el poder de compra de unos " + loc(local) + ", medido en el momento de cada aporte.";
   $("lossBar").style.width = (aport>0 ? Math.min(100, loss/aport*100) : 0) + "%";
   $("s1").classList.add("hide"); $("s2").classList.remove("hide"); window.scrollTo(0,0);
 };
@@ -184,6 +201,8 @@ $("unlock").onclick = function(){
   });
   $("scns").innerHTML = html;
   $("thanks").textContent = obj==="Soy bienes raíces" ? "Gracias, " + nom + ". Veo que eres asesor: tenemos una vía para aliados." : "Listo, " + nom + ". Tu simulación está desbloqueada.";
+  var PM={"Generar ingresos":"Como buscas generar ingresos, en el evento podrás conocer cómo funcionan los modelos que buscan generarlos y qué riesgos implican.","Proteger mi patrimonio":"Como quieres proteger tu patrimonio, te ayudará entender el poder adquisitivo, la diversificación y los riesgos de cada alternativa.","Diversificar fuera de mi país":"Como te interesa diversificar, verás por qué puede ser útil conocer alternativas denominadas en otras monedas."};
+  $("persn").textContent = PM[obj] || "Gracias por usar el simulador. En el evento podrás conocer opciones y resolver tus dudas.";
   $("gate").classList.add("hide"); $("full").classList.remove("hide"); $("full").insertBefore($("thanks").parentNode, $("full").firstChild);
   if(GROUP_LINK && !$("full").querySelector(".gl")){ var g=document.createElement("p"); g.className="gl"; g.innerHTML='<a href="'+GROUP_LINK+'" target="_blank" rel="noopener" style="display:block;text-align:center;padding:14px;border-radius:12px;background:var(--accent);color:var(--accent-t);font-weight:700;text-decoration:none;margin-top:12px">Unirme al grupo de WhatsApp</a>'; $("again").parentNode.insertBefore(g, $("again")); }
 };
