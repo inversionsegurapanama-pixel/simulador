@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registro · Rentas Hoteleras en Dólares: El Desafío</title>
+<style>
+:root{--bg:#f7f4ee;--fg:#1c1a17;--mut:#6a645a;--card:#fff;--bd:#ddd6c8;--ac:#0f6b5c;--acf:#fff;--er:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14130f;--fg:#f1ede5;--mut:#a59f93;--card:#1f1d18;--bd:#38352d;--ac:#4fc3a8;--acf:#0f1f1a;--er:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14130f;--fg:#f1ede5;--mut:#a59f93;--card:#1f1d18;--bd:#38352d;--ac:#4fc3a8;--acf:#0f1f1a;--er:#ff8a80;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:20px 16px 40px}
+main{max-width:520px;margin:auto}
+.tag{display:inline-block;background:var(--ac);color:var(--acf);font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:20px;margin-bottom:12px}
+h1{font-size:1.55rem;line-height:1.25;margin:0 0 8px}
+.sub{color:var(--mut);margin:0 0 16px}
+.info{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:18px;display:grid;gap:6px;font-size:.95rem}
+form{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 4px}label:first-of-type{margin-top:0}
+input[type=text],input[type=tel],input[type=email],select{width:100%;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit}
+input:focus,select:focus{outline:2px solid var(--ac);outline-offset:1px}
+.ck{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:.85rem;color:var(--mut)}.ck input{margin-top:3px;width:18px;height:18px;flex:none}
+.err{color:var(--er);font-size:.85rem;margin-top:10px;min-height:1.2em}
+button,.btn{display:block;width:100%;text-align:center;text-decoration:none;background:var(--ac);color:var(--acf);border:0;border-radius:12px;padding:14px;font:inherit;font-weight:700;cursor:pointer;margin-top:10px}
+.btn.g{background:transparent;color:var(--ac);border:2px solid var(--ac)}
+.ok{display:none;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;text-align:center}
+.ok h2{margin:0 0 6px;font-size:1.3rem}.ok p{color:var(--mut);margin:0 0 6px}
+small{display:block;color:var(--mut);font-size:.78rem;margin-top:16px;text-align:center}
+</style></head><body><main>
+<span class="tag">Evento gratuito · Cupos limitados</span>
+<h1>Rentas Hoteleras en Dólares: El Desafío</h1>
+<p class="sub">Los 5 pasos para generar ingresos pasivos 100% delegados, sin salir de tu país.</p>
+<div class="info"><div>📅 <b>24 y 25 de noviembre de 2026</b></div><div>🕖 7:00 p. m., hora de Panamá 🇵🇦</div><div>💻 100% online y sin costo</div></div>
+<form id="f" novalidate>
+<label for="n">Nombre completo</label><input type="text" id="n" autocomplete="name">
+<label for="w">WhatsApp (con código de país)</label><input type="tel" id="w" autocomplete="tel" placeholder="+57 300 000 0000">
+<label for="e">Correo electrónico</label><input type="email" id="e" autocomplete="email">
+<label for="p">País donde vives</label><input type="text" id="p" autocomplete="country-name">
+<label for="o">¿Cuál es tu objetivo?</label>
+<select id="o"><option value="">Selecciona</option><option>Generar ingresos mensuales</option><option>Proteger mi patrimonio</option><option>Diversificar fuera de mi país</option><option>Soy asesor o corredor</option><option>Solo quiero aprender</option></select>
+<label for="r">¿Qué rango de inversión manejas? (en USD)</label>
+<select id="r"><option value="">Selecciona</option><option>Menos de $200,000</option><option>$200,000 a $300,000</option><option>$300,000 a $500,000</option><option>Más de $500,000</option></select>
+<label class="ck"><input type="checkbox" id="c"><span>Acepto unirme al grupo de WhatsApp y recibir contenido educativo y la invitación al evento por WhatsApp y correo. Puedo salir cuando quiera.</span></label>
+<div class="err" id="er" role="alert"></div>
+<button type="submit">Reservar mi lugar</button>
+</form>
+<div class="ok" id="ok"><h2>¡Listo, ya casi estás dentro! 🎉</h2><p>Último paso: toca el botón. Se abre WhatsApp con tu registro, solo envíalo, y te llevamos al grupo.</p><a class="btn" id="sw" href="#" target="_blank" rel="noopener">Confirmar mi registro y unirme al grupo</a></div>
+<small>Evento educativo. No constituye asesoría financiera ni garantiza rendimientos. Toda inversión implica riesgos.</small>
+</main>
+<script>
+var WA="50768925558",GROUP="https://chat.whatsapp.com/GTPfpCyjr533N45TCFUrKk?s=cl&p=a&mlu=4&ilr=4&iam=2";
+function $(i){return document.getElementById(i)}
+$("sw").style.display=WA?"":"none";
+$("f").addEventListener("submit",function(ev){ev.preventDefault();
+var v={n:$("n").value.trim(),w:$("w").value.trim(),e:$("e").value.trim(),p:$("p").value.trim(),o:$("o").value,r:$("r").value},m="";
+if(!v.n||!v.w||!v.e||!v.p||!v.o||!v.r)m="Completa todos los campos.";
+else if(v.w.replace(/\D/g,"").length<8)m="Revisa tu número de WhatsApp (incluye el código de país).";
+else if(!/^\S+@\S+\.\S+$/.test(v.e))m="Revisa tu correo electrónico.";
+else if(!$("c").checked)m="Acepta para poder registrarte.";
+$("er").textContent=m;if(m)return;
+var t="Hola, quiero reservar mi lugar en Rentas Hoteleras en Dólares: El Desafío (24 y 25 de nov).\n\nNombre: "+v.n+"\nWhatsApp: "+v.w+"\nCorreo: "+v.e+"\nPaís: "+v.p+"\nObjetivo: "+v.o+"\nRango de inversión: "+v.r;
+if(WA)$("sw").href="https://wa.me/"+WA+"?text="+encodeURIComponent(t);
+$("sw").onclick=function(){if(GROUP)setTimeout(function(){location.href=GROUP},700)};
+$("f").style.display="none";$("ok").style.display="block";window.scrollTo(0,0)});
+</script></body></html>
